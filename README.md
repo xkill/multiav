@@ -90,7 +90,7 @@ pprint.pprint(multi_av)
 ```
 
 Here we're creating a CMultiAV object without specifying the
-configuration file (by default "config.cfg"). We can specify it by
+configuration file (by default "engines.cfg"). We can specify it by
 passing the path to the *.cfg file to the constructor of the Python
 object:
 

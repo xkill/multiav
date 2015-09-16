@@ -391,19 +391,37 @@ class CZavScanner(CAvScanner):
 
 #-----------------------------------------------------------------------
 class CMultiAV:
-  def __init__(self, cfg = "config.cfg"):
-    self.engines = [CFProtScanner,  CComodoScanner,      CEsetScanner, 
-                    CAviraScanner,  CBitDefenderScanner, CSophosScanner,
-                    CAvastScanner,  CAvgScanner,         CDrWebScanner,
-                    CMcAfeeScanner, CIkarusScanner,      CFSecureScanner,
-                    CKasperskyScanner, CZavScanner]
-    if has_clamd:
-      self.engines.append(CClamScanner)
+  def __init__(self, cfg = "engines.cfg"):
+    
+
+    self.enginesTable = { "ClamAV"      : CClamScanner,
+                          "F-Prot"      : CFProtScanner,
+                          "Comodo"      : CComodoScanner,
+                          "ESET"        : CEsetScanner,
+                          "Avira"       : CAviraScanner,
+                          "BitDefender" : CBitDefenderScanner,
+                          "Sophos"      : CSophosScanner,
+                          "Avast"       : CAvastScanner,
+                          "AVG"         : CAvgScanner,
+                          "DrWeb"       : CDrWebScanner,
+                          "McAfee"      : CMcAfeeScanner,
+                          "Ikarus"      : CIkarusScanner,
+                          "F-Secure"    : CFSecureScanner,
+                          "Kaspersky"   : CKasperskyScanner,
+                          "ZAV"         : CZavScanner }
+        
 
     self.processes = cpu_count()
     self.cfg = cfg
     self.read_config()
 
+    self.engines = []
+    for engine in self.parser.sections():
+      if engine in self.enginesTable.keys():
+        self.engines.append(self.enginesTable[engine])
+      else:
+        print "Engine %s not implemented." % engine
+  
   def read_config(self):
     parser = ConfigParser.SafeConfigParser()
     parser.optionxform = str
